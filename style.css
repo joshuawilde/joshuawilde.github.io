@@ -1,0 +1,6 @@
+.tictactoe-button {
+    width: 150px;
+    height: 150px;
+    margin-right: -3px;
+    border-radius: 0px !important;
+}
