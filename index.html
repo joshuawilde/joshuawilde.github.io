@@ -93,7 +93,7 @@
              ball.body.velocity.setTo(ball.body.velocity.x, -ball.body.velocity.y);
              }
              
-             rightPlatform.body.position.setTo(rightPlatform.body.position.x, game.input.mousePointer.y - rightPlatform.height / 2);
+             rightPlatform.body.position.setTo(rightPlatform.body.position.x, game.input.activePointer.y - rightPlatform.height / 2);
              
              var y = ball.body.position.y - leftPlatform.height / 2 + ball.height / 2;
              
