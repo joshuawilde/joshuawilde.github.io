@@ -1,2 +1,114 @@
-<body bgcolor=“blue”>
-</body>
+<!DOCTYPE html> 
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <title>Game</title>
+      <script type="text/javascript" src="js/phaser.min.js"></script>
+      <style type="text/css">
+         body {
+         margin: 0;
+         }
+      </style>
+   </head>
+   <body>
+      <script type="text/javascript">
+         var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+         
+             var platforms;
+             var ball;
+             var leftPlatform;
+             var rightPlatform;
+             
+             var leftScore;
+             var rightScore;
+                 
+             function preload() {
+         
+             game.load.image('sky', 'assets/sky.png');
+             game.load.image('ground', 'assets/platform.png');
+             game.load.image('star', 'assets/star.png');
+             game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+         
+         }
+             function create() {
+                     //  We're going to be using physics, so enable the Arcade Physics system
+                 //mouseHandler = new Mouse(game);
+                 
+             game.physics.startSystem(Phaser.Physics.ARCADE);
+         
+             //  A simple background for our game
+             //game.add.sprite(0, 0, 'sky');
+             
+             ball = game.add.sprite(game.world.width / 2, game.world.height / 2, 'star');
+                 
+             game.physics.arcade.enable(ball);  
+             //ball.enableBody = true;
+             ball.body.bounce.setTo(1.0);
+             resetBall();
+                
+                var style = { font: "65px Arial", fill: "#ffffff" };
+                 
+             leftScore = game.add.text(20, 20, '0', style);
+                 
+             rightScore = game.add.text(80, 20, '0', style);
+                 
+             //  The platforms group contains the ground and the 2 ledges we can jump on
+             platforms = game.add.group();
+         
+             //  We will enable physics for any object that is created in this group
+             platforms.enableBody = true;
+         
+             //  Now let's create two ledges
+             leftPlatform = platforms.create(10, 10, 'ground');
+             
+             leftPlatform.scale.setTo(0.25, 0.25);
+             leftPlatform.body.immovable = true;
+         
+             rightPlatform = platforms.create(game.world.width - 10 - leftPlatform.width, 10, 'ground');
+             
+             rightPlatform.scale.setTo(0.25, 0.25);
+             rightPlatform.body.immovable = true;
+             
+                 
+         }
+         
+         function update() {
+             game.physics.arcade.collide(ball, platforms);
+             
+             if (ball.body.position.x > game.world.width)
+             {
+                     resetBall();
+                 leftScore.text = parseInt(leftScore.text) + 1;
+             }
+             
+                 if (ball.body.position.x < 0)
+             {
+                     resetBall();
+                 rightScore.text = parseInt(rightScore.text) + 1;
+             }
+             
+                 if (ball.body.position.y < 0 || ball.body.position.y > game.world.height - ball.height)
+             {
+                     
+             ball.body.velocity.setTo(ball.body.velocity.x, -ball.body.velocity.y);
+             }
+             
+             rightPlatform.body.position.setTo(rightPlatform.body.position.x, game.input.mousePointer.y - rightPlatform.height / 2);
+             
+             var y = ball.body.position.y - leftPlatform.height / 2 + ball.height / 2;
+             
+             leftPlatform.body.position.setTo(leftPlatform.body.position.x, (y - leftPlatform.body.position.y) * 0.08 + leftPlatform.body.position.y);
+             
+             
+         }
+          
+        function resetBall()
+          {
+              var randomAngle = Math.random() * 6.28;
+              ball.body.position.setTo(game.world.width / 2, game.world.height / 2);
+             ball.body.velocity.setTo(500, Math.random() * 200 + 200);
+          }
+         
+      </script>
+   </body>
+</html>
